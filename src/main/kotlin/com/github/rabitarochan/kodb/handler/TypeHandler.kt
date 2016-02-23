@@ -1,5 +1,6 @@
 package com.github.rabitarochan.kodb.handler
 
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.util.*
 import kotlin.reflect.KClass
@@ -9,6 +10,8 @@ import kotlin.reflect.defaultType
 interface TypeHandler {
 
     fun get(name: String, rs: ResultSet): Any
+
+    fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any)
 
     fun getType(): KClass<*>
 

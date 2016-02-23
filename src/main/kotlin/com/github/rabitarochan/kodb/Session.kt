@@ -1,13 +1,15 @@
 package com.github.rabitarochan.kodb
 
 import com.github.rabitarochan.kodb.extractor.ExtractorFactory
+import com.github.rabitarochan.kodb.handler.TypeHandler
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import kotlin.reflect.defaultType
 
 class Session(val connection: Connection) {
 
-    fun <T : Any> query(sql: String, f: (ResultSet) -> T): List<T> {
+    fun <T : Any> queryRaw(sql: String, f: (ResultSet) -> T): List<T> {
         val ps = connection.prepareStatement(sql)
         val rs = ps.executeQuery()
 
@@ -18,11 +20,11 @@ class Session(val connection: Connection) {
         return xs
     }
 
-    inline fun <reified T : Any> query(sql: String): List<T> {
-        val ps = connection.prepareStatement(sql)
+    inline fun <reified T : Any> query(sql: String, params: Array<Any>? = null): List<T> {
+        val ps = createStatement(connection, sql, params)
         val rs = ps.executeQuery()
 
-        val extractor = ExtractorFactory.get<T>()
+        val extractor = ExtractorFactory.get(T::class)
         val result = mutableListOf<T>()
         while(rs.next()) {
             result.add(extractor.extract(rs))
@@ -30,11 +32,11 @@ class Session(val connection: Connection) {
         return result
     }
 
-    inline fun <reified T : Any> queryOne(sql: String): T? {
-        val ps = connection.prepareStatement(sql)
+    inline fun <reified T : Any> queryOne(sql: String, params: Array<Any>? = null): T? {
+        val ps = createStatement(connection, sql, params)
         val rs = ps.executeQuery()
 
-        val extractor = ExtractorFactory.get<T>()
+        val extractor = ExtractorFactory.get(T::class)
 
         if (rs.next()) {
             return extractor.extract(rs)
@@ -49,8 +51,16 @@ class Session(val connection: Connection) {
         return result
     }
 
-    fun createStatement(sql: String): PreparedStatement {
-        throw NotImplementedError()
+    fun createStatement(conn: Connection, sql: String, params: Array<Any>?): PreparedStatement {
+        val ps = conn.prepareStatement(sql)
+        if (params == null) return ps
+
+        params.forEachIndexed { i, param ->
+            val type = param.javaClass.kotlin.defaultType
+            val handler = TypeHandler.get(type)
+            handler.setValue(ps, i + 1, param)
+        }
+        return ps
     }
 
 }

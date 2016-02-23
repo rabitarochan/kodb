@@ -1,5 +1,6 @@
 package com.github.rabitarochan.kodb.handler
 
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import kotlin.reflect.KClass
 
@@ -9,8 +10,12 @@ class BytesTypeHandler() : TypeHandler {
         return rs.getBytes(name)
     }
 
+    override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {
+        ps.setBytes(parameterIndex, value as ByteArray)
+    }
+
     override fun getType(): KClass<*> {
-        return Array<Byte>::class
+        return ByteArray::class
     }
 
 }

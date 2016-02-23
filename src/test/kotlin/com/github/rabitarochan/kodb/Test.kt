@@ -15,8 +15,8 @@ class Test {
     data class Account(val id: Long, val name: String, val createdat: String)
 
     @Test
-    fun test() {
-        println("test")
+    fun test01() {
+        println("test01")
         createConnection().use { conn ->
             val session = Session(conn)
 
@@ -51,7 +51,7 @@ class Test {
 
     @Test
     fun test02() {
-        println("test")
+        println("test02")
         createConnection().use { conn ->
             val session = Session(conn)
 
@@ -119,6 +119,40 @@ class Test {
         }
     }
 
+    @Test
+    fun testQueryWithParameter() {
+        println("testQueryWithParameter")
+        createConnection().use { conn ->
+            val session = Session(conn)
+
+            session.execute("drop table account if exists")
+
+            session.execute("""
+                create table account (
+                    id serial primary key,
+                    name varchar not null,
+                    createdat timestamp not null
+                )
+            """)
+
+            for (i in 1..10000) {
+                session.execute("""
+                    insert into account values (
+                        ${i}, 'User${i}', '${LocalDateTime.now()}'
+                    )
+                """)
+            }
+
+            val times = mutableListOf<Long>()
+            for (i in 1..100) {
+                measureTimeMillis {
+                    session.query<Account>("select * from account where id <= ?", arrayOf(100))
+                }.let { times.add(it) }
+            }
+            //println(times)
+            println("[time Min: ${times.min()}ms, Max: ${times.max()}, Average: ${times.average()}]")
+        }
+    }
 
     @Test
     fun testHandcode() {
