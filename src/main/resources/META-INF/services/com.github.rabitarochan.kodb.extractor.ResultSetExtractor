@@ -1,5 +1,6 @@
 com.github.rabitarochan.kodb.extractor.defaults.BigDecimalExtractor
 com.github.rabitarochan.kodb.extractor.defaults.BooleanExtractor
+com.github.rabitarochan.kodb.extractor.defaults.ByteArrayExtractor
 com.github.rabitarochan.kodb.extractor.defaults.ByteExtractor
 com.github.rabitarochan.kodb.extractor.defaults.BytesExtractor
 com.github.rabitarochan.kodb.extractor.defaults.DoubleExtractor

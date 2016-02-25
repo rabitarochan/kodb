@@ -46,8 +46,14 @@ class Session(val connection: Connection) {
         }
     }
 
-    fun execute(sql: String): Boolean {
-        val ps = connection.prepareStatement(sql)
+    fun update(sql: String, params: Array<Any>? = null): Int {
+        val ps = createStatement(connection, sql, params)
+        val result = ps.executeUpdate()
+        return result
+    }
+
+    fun execute(sql: String, params: Array<Any>? = null): Boolean {
+        val ps = createStatement(connection, sql, params)
         val result = ps.execute()
         return result
     }

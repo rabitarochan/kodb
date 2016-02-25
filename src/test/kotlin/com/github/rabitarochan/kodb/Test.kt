@@ -6,6 +6,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDateTime
 import kotlin.system.measureTimeMillis
+import kotlin.test.assertEquals
 
 import kotlin.io.use
 
@@ -149,7 +150,9 @@ class Test {
             val times = mutableListOf<Long>()
             for (i in 1..100) {
                 measureTimeMillis {
-                    session.query<Account>("select * from account where id <= ?", arrayOf(100))
+                    val res = session.query<Account>("select * from account where id <= ?", arrayOf(100))
+                    assertEquals(100, res.size)
+                    assertEquals(1, res.first().id)
                 }.let { times.add(it) }
             }
             //println(times)
