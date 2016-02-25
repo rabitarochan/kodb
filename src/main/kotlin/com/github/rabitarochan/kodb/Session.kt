@@ -1,6 +1,7 @@
 package com.github.rabitarochan.kodb
 
 import com.github.rabitarochan.kodb.extractor.ExtractorFactory
+import com.github.rabitarochan.kodb.extractor.ResultSetExtractor
 import com.github.rabitarochan.kodb.handler.TypeHandler
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -24,7 +25,7 @@ class Session(val connection: Connection) {
         val ps = createStatement(connection, sql, params)
         val rs = ps.executeQuery()
 
-        val extractor = ExtractorFactory.get(T::class)
+        val extractor = ResultSetExtractor.get(T::class)
         val result = mutableListOf<T>()
         while(rs.next()) {
             result.add(extractor.extract(rs))
@@ -36,7 +37,7 @@ class Session(val connection: Connection) {
         val ps = createStatement(connection, sql, params)
         val rs = ps.executeQuery()
 
-        val extractor = ExtractorFactory.get(T::class)
+        val extractor = ResultSetExtractor.get(T::class)
 
         if (rs.next()) {
             return extractor.extract(rs)

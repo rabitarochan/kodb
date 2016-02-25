@@ -10,16 +10,6 @@ import kotlin.reflect.primaryConstructor
 
 object ExtractorFactory {
 
-    val extractorCache: MutableMap<KType, ResultSetExtractor<*>> = mutableMapOf()
-
-    fun <T : Any> get(kclass: KClass<T>): ResultSetExtractor<T> {
-        val targetType = kclass.defaultType
-        val extractor = extractorCache.getOrPut(targetType, { create(kclass) })
-
-        @Suppress("UNCHECKED_CAST")
-        return extractor as ResultSetExtractor<T>
-    }
-
     fun <T : Any> create(kclass: KClass<T>): ResultSetExtractor<T> {
         val ctor = kclass.primaryConstructor!!
         val params =
@@ -30,7 +20,7 @@ object ExtractorFactory {
                 Proxy.newProxyInstance(
                         ResultSetExtractor::class.java.classLoader,
                         arrayOf(ResultSetExtractor::class.java),
-                        ExtractHandler(ctor.javaConstructor!!, params)
+                        ExtractHandler(ctor.javaConstructor!!, params, kclass)
                 )
 
         @Suppress("UNCHECKED_CAST")
