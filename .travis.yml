@@ -1,3 +1,5 @@
+sudo: false
+
 language: kotlin
 
 jdk:
@@ -7,4 +9,3 @@ jdk:
 
 script:
   - ./gradlew clean test
-
