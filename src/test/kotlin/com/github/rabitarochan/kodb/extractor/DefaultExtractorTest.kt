@@ -206,8 +206,8 @@ class DefaultExtractorTest {
             val xs = session.query<java.sql.Date>("select col_date from test")
 
             assertEquals(10, xs.size)
-            assertEquals(sqlDateOf(1970, 1, 1), xs.first())
-            assertEquals(sqlDateOf(1970, 1, 10), xs.last())
+            assertEquals(dateOf(1970, 1, 1, 0, 0, 0, 0).time, xs.first().time)
+            assertEquals(dateOf(1970, 1, 10, 0, 0, 0, 0).time, xs.last().time)
         }
     }
 
@@ -221,9 +221,42 @@ class DefaultExtractorTest {
             val xs = session.query<java.sql.Time>("select col_time from test")
 
             assertEquals(10, xs.size)
-            assertEquals(sqlTimeOf(12, 34, 1), xs.first())
-            assertEquals(sqlTimeOf(12, 34, 10), xs.last())
+            assertEquals(dateOf(1970, 1, 1, 12, 34, 1, 0).time, xs.first().time)
+            assertEquals(dateOf(1970, 1, 1, 12, 34, 10, 0).time, xs.last().time)
         }
+
+    }
+
+    @Test
+    fun sqlTimestampExtractor() {
+        createConnection().use { conn ->
+            val session = Session(conn)
+
+            init(conn)
+
+            val xs = session.query<java.sql.Timestamp>("select col_timestamp from test")
+
+            assertEquals(10, xs.size)
+            assertEquals(sqlTimestampOf(1970, 1, 1, 12, 34, 1, 1).time, xs.first().time)
+            assertEquals(sqlTimestampOf(1970, 1, 10, 12, 34, 10, 10).time, xs.last().time)
+        }
+
+    }
+
+    @Test
+    fun dateExtractor() {
+        createConnection().use { conn ->
+            val session = Session(conn)
+
+            init(conn)
+
+            val xs = session.query<java.util.Date>("select col_timestamp from test")
+
+            assertEquals(10, xs.size)
+            assertEquals(dateOf(1970, 1, 1, 12, 34, 1, 1).time, xs.first().time)
+            assertEquals(dateOf(1970, 1, 10, 12, 34, 10, 10).time, xs.last().time)
+        }
+
     }
 
 
@@ -249,13 +282,14 @@ class DefaultExtractorTest {
               col_string varchar not null,
               col_boolean boolean not null,
               col_date date not null,
-              col_time time not null
+              col_time time not null,
+              col_timestamp timestamp not null
             )
         """)
 
         for (i in 1..10) {
             session.execute(
-                    "insert into test values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "insert into test values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     arrayOf(
                             i,
                             i,
@@ -263,28 +297,48 @@ class DefaultExtractorTest {
                             BigDecimal("10000000000000000000.12") + BigDecimal(i),
                             100.123 + i,
                             100.123F + i,
-                            i.toByte().let { byteArrayOf(it, it, it, it) },
                             i.toByte(),
+                            i.toByte().let { byteArrayOf(it, it, it, it) },
                             "Title$i",
                             (i % 2 == 0),
                             sqlDateOf(1970, 1, i),
-                            sqlTimeOf(12, 34, i)
+                            sqlTimeOf(12, 34, i),
+                            sqlTimestampOf(1970, 1, i, 12, 34, i, i)
                     )
             )
         }
     }
 
-    private fun sqlDateOf(year: Int, month: Int, day: Int): java.sql.Date {
-        val cal = Calendar.getInstance()
-        cal.set(year, month, day)
-        return java.sql.Date(cal.time.time)
+    private fun sqlDateOf(year: Int, month: Int, date: Int): java.sql.Date {
+        dateOf(year, month, date, 0, 0, 0, 0).let {
+            return java.sql.Date(it.time)
+        }
     }
 
     private fun sqlTimeOf(hour: Int, minute: Int, second: Int): java.sql.Time {
-        val cal = Calendar.getInstance()
-        cal.set(1970, 1, 1, hour, minute, second)
-        return java.sql.Time(cal.time.time)
+        dateOf(1970, Calendar.JANUARY, 1, hour, minute, second, 0).let {
+            return java.sql.Time(it.time)
+        }
+    }
 
+    private fun sqlTimestampOf(year: Int, month: Int, date: Int, hour: Int, minute: Int, second: Int, milliSecond: Int): java.sql.Timestamp {
+        dateOf(year, month, date, hour, minute, second, milliSecond).let {
+            return java.sql.Timestamp(it.time)
+        }
+    }
+
+    private fun dateOf(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, milliSecond: Int = 0): java.util.Date {
+        Calendar.getInstance().let {
+            it.time = java.util.Date()
+            it.set(Calendar.YEAR, year)
+            it.set(Calendar.MONTH, month - 1)
+            it.set(Calendar.DATE, day)
+            it.set(Calendar.HOUR_OF_DAY, hour)
+            it.set(Calendar.MINUTE, minute)
+            it.set(Calendar.SECOND, second)
+            it.set(Calendar.MILLISECOND, milliSecond)
+            return it.time
+        }
     }
 
 }
