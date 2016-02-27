@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 class LongTypeHandler() : TypeHandler {
 
-    override fun get(name: String, rs: ResultSet): Any {
+    override fun getValue(rs: ResultSet, name: String): Any {
         return rs.getLong(name)
     }
 

@@ -9,23 +9,24 @@ import kotlin.reflect.KClass
 class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParameter>, val kclass: KClass<*>) : InvocationHandler {
 
     override fun invoke(proxy: Any, method: Method, args: Array<out Any>): Any {
-        when (method.name) {
-            "extract" -> return extractHandler(args[0] as ResultSet)
-            "getTargetType" -> return getTargetTypeHandler()
-            else -> error("")
+        val methodName = method.name
+        when (methodName) {
+            "extract" -> return invokeExtract(args[0] as ResultSet)
+            "getTargetType" -> return invokeGetTargetType()
+            else -> throw NotImplementedError("Method '$methodName' is not implemented.")
         }
     }
 
-    private fun extractHandler(rs: ResultSet): Any {
+    private fun invokeExtract(rs: ResultSet): Any {
         val ctorArgs = params.map { param ->
-            param.typeHandler.get(param.name, rs)
+            param.typeHandler.getValue(rs, param.name)
         }.toTypedArray()
 
         val instance = ctor.newInstance(*ctorArgs)
         return instance as Any
     }
 
-    private fun getTargetTypeHandler(): Any {
+    private fun invokeGetTargetType(): Any {
         return kclass
     }
 

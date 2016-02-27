@@ -7,16 +7,16 @@ import kotlin.reflect.KClass
 
 class BigDecimalTypeHandler() : TypeHandler {
 
-    override fun getType(): KClass<*> {
-        return BigDecimal::class
+    override fun getValue(rs: ResultSet, name: String): Any {
+        return rs.getBigDecimal(name)
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {
         ps.setBigDecimal(parameterIndex, value as BigDecimal)
     }
 
-    override fun get(name: String, rs: ResultSet): Any {
-        return rs.getBigDecimal(name)
+    override fun getType(): KClass<*> {
+        return BigDecimal::class
     }
 
 }

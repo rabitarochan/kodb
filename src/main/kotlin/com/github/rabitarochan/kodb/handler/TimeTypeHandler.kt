@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 class TimeTypeHandler() : TypeHandler {
 
-    override fun get(name: String, rs: ResultSet): Any {
+    override fun getValue(rs: ResultSet, name: String): Any {
         return rs.getTime(name)
     }
 

@@ -9,7 +9,7 @@ import kotlin.reflect.defaultType
 
 interface TypeHandler {
 
-    fun get(name: String, rs: ResultSet): Any
+    fun getValue(rs: ResultSet, name: String): Any
 
     fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any)
 
