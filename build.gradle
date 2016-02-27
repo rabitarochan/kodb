@@ -1,11 +1,11 @@
 apply plugin: 'kotlin'
 apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: "signing"
 
 group = 'com.github.rabitarochan'
+archivesBaseName = 'kodb'
 version = '0.1-SNAPSHOT'
-project.ext {
-    artifactId = 'kodb'
-}
 
 buildscript {
     ext.kotlin_version = '1.0.0'
@@ -35,5 +35,64 @@ idea {
     module {
         inheritOutputDirs = false
         outputDir = file('build/classes/main/')
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        beforeDeployment {
+            MavenDeployment deployment -> signing.signPom(deployment)
+        }
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+
+        pom.project {
+            name 'kodb'
+            packaging 'jar'
+            description 'A simple object mapper for Kotlin.'
+            url 'http://github.com/rabitarochan/kodb'
+
+            scm {
+                url "scm:git@github.com:rabitarochan/kodb.git"
+                connection "scm:git@github.com:rabitarochan/kodb.git"
+                developerConnection "scm:git@github.com:rabitarochan/kodb.git"
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            developers {
+                developer {
+                    id 'rabitarochan'
+                    name 'Kengo Asamizu'
+                    email 'rabitarochan@gmail.com'
+                }
+            }
+        }
+
     }
 }
