@@ -56,43 +56,49 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
-    repositories.mavenDeployer {
-        beforeDeployment {
-            MavenDeployment deployment -> signing.signPom(deployment)
-        }
-        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-            authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
-        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-            authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
-
-        pom.project {
-            name 'kodb'
-            packaging 'jar'
-            description 'A simple object mapper for Kotlin.'
-            url 'http://github.com/rabitarochan/kodb'
-
-            scm {
-                url "scm:git@github.com:rabitarochan/kodb.git"
-                connection "scm:git@github.com:rabitarochan/kodb.git"
-                developerConnection "scm:git@github.com:rabitarochan/kodb.git"
+try {
+    uploadArchives {
+        repositories.mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
             }
-            licenses {
-                license {
-                    name 'MIT License'
-                    url 'http://www.opensource.org/licenses/mit-license.php'
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                name 'kodb'
+                packaging 'jar'
+                description 'A simple object mapper for Kotlin.'
+                url 'http://github.com/rabitarochan/kodb'
+
+                scm {
+                    url "scm:git@github.com:rabitarochan/kodb.git"
+                    connection "scm:git@github.com:rabitarochan/kodb.git"
+                    developerConnection "scm:git@github.com:rabitarochan/kodb.git"
+                }
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'rabitarochan'
+                        name 'Kengo Asamizu'
+                        email 'rabitarochan@gmail.com'
+                    }
                 }
             }
-            developers {
-                developer {
-                    id 'rabitarochan'
-                    name 'Kengo Asamizu'
-                    email 'rabitarochan@gmail.com'
-                }
-            }
-        }
 
+        }
     }
+} catch (MissingPropertyException e) {
+    logger.warn("It is possible to restrain this error only in travis-ci. When an exception occurred to the time of a local build, correspondence is needed.")
+    e.printStackTrace()
 }
+
