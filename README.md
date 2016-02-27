@@ -1,6 +1,6 @@
 # kodb
 
-[![Build Status](https://travis-ci.org/rabitarochan/kodb.svg)](https://travis.ci.org/search/kodb/)
+[![Build Status](https://travis-ci.org/rabitarochan/kodb.svg)](https://travis-ci.org/rabitarochan/kodb)
 
 A simple object mapper for Kotlin, inspired from [dapper-dot-net](https://github.com/StackExchange/dapper-dot-net).
 
