@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 class ByteTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any {
+    override fun getValue(rs: ResultSet, name: String): Any? {
         return rs.getByte(name)
     }
 
@@ -17,6 +17,5 @@ class ByteTypeHandler() : TypeHandler {
     override fun getType(): KClass<*> {
         return Byte::class
     }
-
 
 }

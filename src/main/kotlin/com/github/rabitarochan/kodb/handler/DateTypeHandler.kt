@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 class DateTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any {
+    override fun getValue(rs: ResultSet, name: String): Any? {
         return rs.getDate(name)
     }
 

@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 class StringTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any {
+    override fun getValue(rs: ResultSet, name: String): Any? {
         return rs.getString(name)
     }
 

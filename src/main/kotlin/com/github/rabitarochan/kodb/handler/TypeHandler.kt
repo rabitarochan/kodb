@@ -6,10 +6,11 @@ import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.defaultType
+import kotlin.reflect.jvm.javaType
 
 interface TypeHandler {
 
-    fun getValue(rs: ResultSet, name: String): Any
+    fun getValue(rs: ResultSet, name: String): Any?
 
     fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any)
 
@@ -17,9 +18,9 @@ interface TypeHandler {
 
     companion object {
 
-        val handlers: Map<KType, TypeHandler> by lazy {
+        val handlers: Map<String, TypeHandler> by lazy {
             val loader = ServiceLoader.load(TypeHandler::class.java)
-            loader.map { Pair(it.getType().defaultType, it) }.toMap()
+            loader.map { Pair(it.getType().defaultType.javaType.typeName, it) }.toMap()
         }
 
         fun get(kclass: KClass<*>): TypeHandler {
@@ -27,7 +28,13 @@ interface TypeHandler {
         }
 
         fun get(ktype: KType): TypeHandler {
-            return handlers.get(ktype) ?: throw NotImplementedError("")
+            val typeName = ktype.javaType.typeName
+            val handler = handlers.get(typeName)
+            if (handler == null) {
+                throw NotImplementedError("TypeHandler of '${typeName}' is not registered.")
+            } else {
+                return handler
+            }
         }
 
     }

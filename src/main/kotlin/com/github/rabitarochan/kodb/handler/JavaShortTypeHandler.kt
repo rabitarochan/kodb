@@ -1,22 +1,22 @@
 package com.github.rabitarochan.kodb.handler
 
-import java.math.BigDecimal
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import kotlin.reflect.KClass
 
-class BigDecimalTypeHandler() : TypeHandler {
+class JavaShortTypeHandler() : TypeHandler {
 
     override fun getValue(rs: ResultSet, name: String): Any? {
-        return rs.getBigDecimal(name)
+        return rs.getShort(name)
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {
-        ps.setBigDecimal(parameterIndex, value as BigDecimal)
+        ps.setShort(parameterIndex, value as Short)
     }
 
     override fun getType(): KClass<*> {
-        return BigDecimal::class
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return java.lang.Short::class
     }
 
 }

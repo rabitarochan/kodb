@@ -9,6 +9,13 @@ com.github.rabitarochan.kodb.handler.DateTypeHandler
 com.github.rabitarochan.kodb.handler.DoubleTypeHandler
 com.github.rabitarochan.kodb.handler.FloatTypeHandler
 com.github.rabitarochan.kodb.handler.IntTypeHandler
+com.github.rabitarochan.kodb.handler.JavaBooleanTypeHandler
+com.github.rabitarochan.kodb.handler.JavaByteTypeHandler
+com.github.rabitarochan.kodb.handler.JavaDoubleTypeHandler
+com.github.rabitarochan.kodb.handler.JavaFloatTypeHandler
+com.github.rabitarochan.kodb.handler.JavaIntTypeHandler
+com.github.rabitarochan.kodb.handler.JavaLongTypeHandler
+com.github.rabitarochan.kodb.handler.JavaShortTypeHandler
 com.github.rabitarochan.kodb.handler.LongTypeHandler
 com.github.rabitarochan.kodb.handler.ObjectTypeHandler
 com.github.rabitarochan.kodb.handler.RefTypeHandler

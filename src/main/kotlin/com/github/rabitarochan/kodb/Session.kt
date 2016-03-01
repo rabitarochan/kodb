@@ -63,8 +63,8 @@ class Session(val connection: Connection) {
         if (params == null) return ps
 
         params.forEachIndexed { i, param ->
-            val type = param.javaClass.kotlin.defaultType
-            val handler = TypeHandler.get(type)
+            val kclass = param.javaClass.kotlin
+            val handler = TypeHandler.get(kclass)
             handler.setValue(ps, i + 1, param)
         }
         return ps

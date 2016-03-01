@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 class TimestampTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any {
+    override fun getValue(rs: ResultSet, name: String): Any? {
         return rs.getTimestamp(name)
     }
 
