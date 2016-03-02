@@ -13,3 +13,6 @@ com.github.rabitarochan.kodb.extractor.defaults.SQLDateExtractor
 com.github.rabitarochan.kodb.extractor.defaults.SQLTimeExtractor
 com.github.rabitarochan.kodb.extractor.defaults.SQLTimestampExtractor
 com.github.rabitarochan.kodb.extractor.defaults.StringExtractor
+com.github.rabitarochan.kodb.extractor.defaults.jsr310.LocalDateExtractor
+com.github.rabitarochan.kodb.extractor.defaults.jsr310.LocalDateTimeExtractor
+com.github.rabitarochan.kodb.extractor.defaults.jsr310.LocalTimeExtractor

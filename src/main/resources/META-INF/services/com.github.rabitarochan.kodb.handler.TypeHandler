@@ -26,3 +26,6 @@ com.github.rabitarochan.kodb.handler.StringTypeHandler
 com.github.rabitarochan.kodb.handler.TimestampTypeHandler
 com.github.rabitarochan.kodb.handler.TimeTypeHandler
 com.github.rabitarochan.kodb.handler.URLTypeHandler
+com.github.rabitarochan.kodb.handler.jsr310.LocalDateHandler
+com.github.rabitarochan.kodb.handler.jsr310.LocalDateTimeHandler
+com.github.rabitarochan.kodb.handler.jsr310.LocalTimeHandler
