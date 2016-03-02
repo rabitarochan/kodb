@@ -11,6 +11,12 @@ class FloatExtractor() : ResultSetExtractor<Float> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Float::class
+        TODO()
     }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Float::class, java.lang.Float::class)
+    }
+
 }

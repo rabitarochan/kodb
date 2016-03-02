@@ -11,6 +11,12 @@ class DoubleExtractor() : ResultSetExtractor<Double> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Double::class
+        TODO()
     }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Double::class, java.lang.Double::class)
+    }
+
 }

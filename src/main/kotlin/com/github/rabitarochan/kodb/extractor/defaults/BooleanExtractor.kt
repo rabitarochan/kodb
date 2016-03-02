@@ -11,7 +11,12 @@ class BooleanExtractor() : ResultSetExtractor<Boolean> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Boolean::class
+        TODO()
+    }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Boolean::class, java.lang.Boolean::class)
     }
 
 }

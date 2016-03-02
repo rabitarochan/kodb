@@ -11,7 +11,12 @@ class LongExtractor() : ResultSetExtractor<Long> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Long::class
+        TODO()
+    }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Long::class, java.lang.Long::class)
     }
 
 }

@@ -3,39 +3,48 @@ package com.github.rabitarochan.kodb.extractor
 import java.sql.ResultSet
 import java.util.*
 import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
 import kotlin.reflect.KType
 import kotlin.reflect.defaultType
+import kotlin.reflect.jvm.javaType
+import kotlin.reflect.jvm.jvmName
 
-interface ResultSetExtractor<T: Any> {
+interface ResultSetExtractor<T: Any?> {
 
-    fun extract(rs: ResultSet): T
+    fun extract(rs: ResultSet): T?
 
     fun getTargetType(): KClass<*>
 
+    open fun getTargetTypes(): Array<KClass<*>> {
+        return arrayOf(getTargetType())
+    }
+
     companion object {
 
-        val extractors: Map<KType, ResultSetExtractor<*>> by lazy {
+        val extractors: Map<String, ResultSetExtractor<*>> by lazy {
             val loader = ServiceLoader.load(ResultSetExtractor::class.java)
-            loader.map { Pair(it.getTargetType().defaultType, it) }.toMap()
+            loader.flatMap { extractor ->
+                extractor.getTargetTypes()
+                         .map { Pair(it.defaultType.javaType.typeName, extractor) }
+            }.toMap()
         }
 
-        val generatedExtractors = mutableMapOf<KType, ResultSetExtractor<*>>()
+        val generatedExtractors = mutableMapOf<String, ResultSetExtractor<*>>()
 
-        fun <T: Any> get(kclass: KClass<T>): ResultSetExtractor<T> {
-            val type = kclass.defaultType
-            generatedExtractors.get(type)?.let {
+        fun <T: Any?> get(typeName: String, ctor: () -> KFunction<T>): ResultSetExtractor<T> {
+            generatedExtractors.get(typeName)?.let {
                 @Suppress("UNCHECKED_CAST")
                 return it as ResultSetExtractor<T>
             }
 
-            extractors.get(type)?.let {
+            extractors.get(typeName)?.let {
                 @Suppress("UNCHECKED_CAST")
                 return it as ResultSetExtractor<T>
             }
 
             // generate
-            val extractor = ExtractorFactory.create(kclass)
-            generatedExtractors.put(type, extractor)
+            val extractor = ExtractorFactory.create(ctor())
+            generatedExtractors.put(typeName, extractor)
             return extractor
         }
 

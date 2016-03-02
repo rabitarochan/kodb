@@ -11,7 +11,12 @@ class IntExtractor() : ResultSetExtractor<Int> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Int::class
+        TODO()
+    }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Int::class, java.lang.Integer::class)
     }
 
 }

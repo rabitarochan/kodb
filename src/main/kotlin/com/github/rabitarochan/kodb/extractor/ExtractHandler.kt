@@ -4,9 +4,8 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.sql.ResultSet
-import kotlin.reflect.KClass
 
-class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParameter>, val kclass: KClass<*>) : InvocationHandler {
+class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParameter>) : InvocationHandler {
 
     override fun invoke(proxy: Any, method: Method, args: Array<out Any>): Any {
         val methodName = method.name
@@ -27,7 +26,7 @@ class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParame
     }
 
     private fun invokeGetTargetType(): Any {
-        return kclass
+        TODO("Do not invoke method 'ExtractHandler#getTargetType' in proxy class.")
     }
 
 }

@@ -9,6 +9,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class Jsr310ExtractorTest() {
 
@@ -28,18 +30,28 @@ class Jsr310ExtractorTest() {
 
             for (i in 1..10) {
                 session.update(
-                        "insert into test values(?, ?, null)",
+                        "insert into test values(?, ?, ?)",
                         arrayOf(
                                 i,
-                                LocalDate.of(2016, 1, i)
+                                LocalDate.of(2016, 1, i),
+                                if (i % 2 == 0) null else LocalDate.of(2016, 1, i)
                         )
                 )
             }
 
-            val result = session.query<LocalDate>("select col_localdate from test")
-            assertEquals(10, result.size)
-            assertEquals(LocalDate.of(2016, 1, 1), result.first())
-            assertEquals(LocalDate.of(2016, 1, 10), result.last())
+            session.query<LocalDate>("select col_localdate from test").let {
+                assertEquals(10, it.size)
+                assertEquals(LocalDate.of(2016, 1, 1), it.first())
+                assertEquals(LocalDate.of(2016, 1, 10), it.last())
+            }
+
+            session.query<LocalDate?>("select col_localdatenull from test").let {
+                assertEquals(10, it.size)
+                assertEquals(5, it.filter { it == null }.size)
+                assertEquals(LocalDate.of(2016, 1, 1), it.first())
+                assertNull(it.last())
+            }
+
         }
     }
 
@@ -59,18 +71,27 @@ class Jsr310ExtractorTest() {
 
             for (i in 1..10) {
                 session.update(
-                        "insert into test values(?, ?, null)",
+                        "insert into test values(?, ?, ?)",
                         arrayOf(
                                 i,
-                                LocalTime.of(12, 34, i)
+                                LocalTime.of(12, 34, i),
+                                if (i % 2 == 0) null else LocalTime.of(12, 34, i)
                         )
                 )
             }
 
-            val result = session.query<LocalTime>("select col_localtime from test")
-            assertEquals(10, result.size)
-            assertEquals(LocalTime.of(12, 34, 1), result.first())
-            assertEquals(LocalTime.of(12, 34, 10), result.last())
+            session.query<LocalTime>("select col_localtime from test").let {
+                assertEquals(10, it.size)
+                assertEquals(LocalTime.of(12, 34, 1), it.first())
+                assertEquals(LocalTime.of(12, 34, 10), it.last())
+            }
+
+            session.query<LocalTime?>("select col_localtimenull from test").let {
+                assertEquals(10, it.size)
+                assertEquals(5, it.filter { it == null }.size)
+                assertEquals(LocalTime.of(12, 34, 1), it.first())
+                assertNull(it.last())
+            }
         }
     }
 
@@ -90,18 +111,27 @@ class Jsr310ExtractorTest() {
 
             for (i in 1..10) {
                 session.update(
-                        "insert into test values(?, ?, null)",
+                        "insert into test values(?, ?, ?)",
                         arrayOf(
                                 i,
-                                LocalDateTime.of(2016, 1, i, 12, 34, i, i)
+                                LocalDateTime.of(2016, 1, i, 12, 34, i, i),
+                                if (i % 2 == 0) null else LocalDateTime.of(2016, 1, i, 12, 34, i, i)
                         )
                 )
             }
 
-            val result = session.query<LocalDateTime>("select col_localdatetime from test")
-            assertEquals(10, result.size)
-            assertEquals(LocalDateTime.of(2016, 1, 1, 12, 34, 1, 1), result.first())
-            assertEquals(LocalDateTime.of(2016, 1, 10, 12, 34, 10, 10), result.last())
+            session.query<LocalDateTime>("select col_localdatetime from test").let {
+                assertEquals(10, it.size)
+                assertEquals(LocalDateTime.of(2016, 1, 1, 12, 34, 1, 1), it.first())
+                assertEquals(LocalDateTime.of(2016, 1, 10, 12, 34, 10, 10), it.last())
+            }
+
+            session.query<LocalDateTime?>("select col_localdatetimenull from test").let {
+                assertEquals(10, it.size)
+                assertEquals(5, it.filter { it == null }.size)
+                assertEquals(LocalDateTime.of(2016, 1, 1, 12, 34, 1, 1), it.first())
+                assertNull(it.last())
+            }
         }
     }
 

@@ -11,6 +11,12 @@ class ByteExtractor() : ResultSetExtractor<Byte> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Byte::class
+        TODO()
     }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Byte::class, java.lang.Byte::class)
+    }
+
 }

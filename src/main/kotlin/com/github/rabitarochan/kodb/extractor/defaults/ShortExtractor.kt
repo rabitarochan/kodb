@@ -11,7 +11,12 @@ class ShortExtractor() : ResultSetExtractor<Short> {
     }
 
     override fun getTargetType(): KClass<*> {
-        return Short::class
+        TODO()
+    }
+
+    override fun getTargetTypes(): Array<KClass<*>> {
+        @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+        return arrayOf(Short::class, java.lang.Short::class)
     }
 
 }

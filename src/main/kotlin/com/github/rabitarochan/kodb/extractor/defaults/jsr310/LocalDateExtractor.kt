@@ -9,8 +9,8 @@ import kotlin.reflect.KClass
 
 class LocalDateExtractor() : ResultSetExtractor<LocalDate> {
 
-    override fun extract(rs: ResultSet): LocalDate {
-        val sqlDate = rs.getDate(firstColumnIndex)
+    override fun extract(rs: ResultSet): LocalDate? {
+        val sqlDate = rs.getDate(firstColumnIndex) ?: return null
         val localDate = sqlDate.toLocalDate()
         return localDate
     }
