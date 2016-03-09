@@ -25,13 +25,13 @@ class Session(val connection: Connection) {
         return xs
     }
 
-    inline fun <reified T : Any> query(sql: String, params: Array<Any?>? = null): List<T> {
+    inline fun <reified T> query(sql: String, params: Array<Any?>? = null): List<T> {
         val ps = createStatement(connection, sql, params)
         val rs = ps.executeQuery()
 
         val typeName = T::class.defaultType.javaType.typeName
 
-        val extractor = ResultSetExtractor.get(typeName, { T::class.primaryConstructor!! })
+        val extractor = ResultSetExtractor.get(typeName, { T::class.constructors.first() })
         val result = mutableListOf<T?>()
         while(rs.next()) {
             result.add(extractor.extract(rs))
