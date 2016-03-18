@@ -1,22 +1,20 @@
 package com.github.rabitarochan.kodb
 
-import com.github.rabitarochan.kodb.extractor.ExtractorFactory
 import com.github.rabitarochan.kodb.extractor.ResultSetExtractor
 import com.github.rabitarochan.kodb.handler.TypeHandler
 import java.sql.Connection
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.Types
+import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.defaultType
 import kotlin.reflect.jvm.javaType
-import kotlin.reflect.primaryConstructor
 
 class Session(val connection: Connection) {
 
-    fun <T : Any> queryRaw(sql: String, f: (ResultSet) -> T): List<T> {
+    fun <T : Any> queryRaw(sql: String, f: (WrappedResultSet) -> T): List<T> {
         val ps = connection.prepareStatement(sql)
-        val rs = ps.executeQuery()
+        val rs = WrappedResultSet(ps.executeQuery())
 
         var xs = mutableListOf<T>()
         while (rs.next()) {
@@ -27,7 +25,7 @@ class Session(val connection: Connection) {
 
     inline fun <reified T> query(sql: String, params: Array<Any?>? = null): List<T> {
         val ps = createStatement(connection, sql, params)
-        val rs = ps.executeQuery()
+        val rs = WrappedResultSet(ps.executeQuery())
 
         val typeName = T::class.defaultType.javaType.typeName
 
@@ -41,13 +39,13 @@ class Session(val connection: Connection) {
         return result as List<T>
     }
 
-    inline fun <reified T : Any> queryOne(sql: String, params: Array<Any?>? = null): T? {
+    inline fun <reified T> queryOne(sql: String, params: Array<Any?>? = null): T? {
         val ps = createStatement(connection, sql, params)
-        val rs = ps.executeQuery()
+        val rs = WrappedResultSet(ps.executeQuery())
 
         val typeName = T::class.defaultType.javaType.typeName
 
-        val extractor = ResultSetExtractor.get(typeName, { T::class.primaryConstructor!! })
+        val extractor = ResultSetExtractor.get(typeName, { T::class.constructors.first() })
 
         if (rs.next()) {
             return extractor.extract(rs)
@@ -82,6 +80,10 @@ class Session(val connection: Connection) {
             }
         }
         return ps
+    }
+
+    private fun <T: Any> getConstructor(kc: KClass<T>): KFunction<T> {
+        return kc.constructors.first()
     }
 
 }

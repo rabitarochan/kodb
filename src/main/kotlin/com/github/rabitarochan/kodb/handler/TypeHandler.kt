@@ -1,7 +1,7 @@
 package com.github.rabitarochan.kodb.handler
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -10,7 +10,7 @@ import kotlin.reflect.jvm.javaType
 
 interface TypeHandler {
 
-    fun getValue(rs: ResultSet, name: String): Any?
+    fun getValue(rs: WrappedResultSet, name: String): Any?
 
     fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any)
 

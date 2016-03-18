@@ -1,5 +1,6 @@
 package com.github.rabitarochan.kodb.extractor
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.sql.ResultSet
 import java.util.*
 import kotlin.reflect.KClass
@@ -9,9 +10,9 @@ import kotlin.reflect.defaultType
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.jvm.jvmName
 
-interface ResultSetExtractor<T: Any?> {
+interface ResultSetExtractor<T> {
 
-    fun extract(rs: ResultSet): T?
+    fun extract(rs: WrappedResultSet): T?
 
     fun getTargetType(): KClass<*>
 

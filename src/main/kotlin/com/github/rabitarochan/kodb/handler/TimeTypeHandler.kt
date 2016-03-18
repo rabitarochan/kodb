@@ -1,14 +1,14 @@
 package com.github.rabitarochan.kodb.handler
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.Time
 import kotlin.reflect.KClass
 
 class TimeTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any? {
-        return rs.getTime(name)
+    override fun getValue(rs: WrappedResultSet, name: String): Any? {
+        return rs.sqlTime(name)
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {

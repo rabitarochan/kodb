@@ -1,5 +1,6 @@
 package com.github.rabitarochan.kodb.extractor
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
@@ -10,13 +11,13 @@ class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParame
     override fun invoke(proxy: Any, method: Method, args: Array<out Any>): Any {
         val methodName = method.name
         when (methodName) {
-            "extract" -> return invokeExtract(args[0] as ResultSet)
+            "extract" -> return invokeExtract(args[0] as WrappedResultSet)
             "getTargetType" -> return invokeGetTargetType()
             else -> throw NotImplementedError("Method '$methodName' is not implemented.")
         }
     }
 
-    private fun invokeExtract(rs: ResultSet): Any {
+    private fun invokeExtract(rs: WrappedResultSet): Any {
         val ctorArgs = params.map { param ->
             param.typeHandler.getValue(rs, param.name)
         }.toTypedArray()

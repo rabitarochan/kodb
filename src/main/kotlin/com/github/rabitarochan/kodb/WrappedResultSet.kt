@@ -47,6 +47,12 @@ class WrappedResultSet(val resultSet: ResultSet) {
 
     fun blob(prop: KProperty1<*, *>): java.sql.Blob? = blob(prop.name)
 
+    fun boolean(columnIndex: Int): Boolean? = wasNullOf(resultSet.getBoolean(columnIndex))
+
+    fun boolean(columnName: String): Boolean? = wasNullOf(resultSet.getBoolean(columnName))
+
+    fun boolean(prop: KProperty1<*, *>): Boolean? = boolean(prop.name)
+
     fun byte(columnIndex: Int): Byte? = wasNullOf(resultSet.getByte(columnIndex))
 
     fun byte(columnName: String): Byte? = wasNullOf(resultSet.getByte(columnName))

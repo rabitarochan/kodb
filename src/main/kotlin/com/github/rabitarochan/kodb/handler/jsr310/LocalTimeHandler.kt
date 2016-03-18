@@ -1,5 +1,6 @@
 package com.github.rabitarochan.kodb.handler.jsr310
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import com.github.rabitarochan.kodb.handler.TypeHandler
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -9,10 +10,8 @@ import kotlin.reflect.KClass
 
 class LocalTimeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any? {
-        val sqlTime = rs.getTime(name) ?: return null
-        val localTime = sqlTime.toLocalTime()
-        return localTime
+    override fun getValue(rs: WrappedResultSet, name: String): Any? {
+        return rs.sqlTime(name)?.toLocalTime()
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {

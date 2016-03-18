@@ -1,14 +1,14 @@
 package com.github.rabitarochan.kodb.handler
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.SQLXML
 import kotlin.reflect.KClass
 
 class SqlXmlTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any? {
-        return rs.getSQLXML(name)
+    override fun getValue(rs: WrappedResultSet, name: String): Any? {
+        return rs.sqlXml(name)
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {

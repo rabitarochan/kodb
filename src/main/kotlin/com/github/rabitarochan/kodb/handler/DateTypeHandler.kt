@@ -1,14 +1,14 @@
 package com.github.rabitarochan.kodb.handler
 
+import com.github.rabitarochan.kodb.WrappedResultSet
 import java.sql.Date
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import kotlin.reflect.KClass
 
 class DateTypeHandler() : TypeHandler {
 
-    override fun getValue(rs: ResultSet, name: String): Any? {
-        return rs.getDate(name)
+    override fun getValue(rs: WrappedResultSet, name: String): Any? {
+        return rs.sqlDate(name)
     }
 
     override fun setValue(ps: PreparedStatement, parameterIndex: Int, value: Any) {
