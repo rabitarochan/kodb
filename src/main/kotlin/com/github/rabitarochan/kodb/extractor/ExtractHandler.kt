@@ -19,7 +19,7 @@ class ExtractHandler<T>(val ctor: Constructor<T>, val params: List<ExtractParame
 
     private fun invokeExtract(rs: WrappedResultSet): Any {
         val ctorArgs = params.map { param ->
-            param.typeHandler.getValue(rs, param.name)
+            param.typeHandler.getValue(rs, param.columnName)
         }.toTypedArray()
 
         val instance = ctor.newInstance(*ctorArgs)
