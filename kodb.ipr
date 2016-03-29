@@ -15,6 +15,10 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kodb_main" target="1.8" />
+      <module name="kodb_test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
@@ -39,11 +43,6 @@
           </set>
         </option>
         <option name="useAutoImport" value="true" />
-        <option name="myModules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
       </GradleProjectSettings>
     </option>
   </component>
@@ -194,10 +193,12 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/kodb.iml" filepath="$PROJECT_DIR$/kodb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kodb.iml" filepath="$PROJECT_DIR$/.idea/modules/kodb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kodb_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kodb_main.iml" group="kodb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kodb_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kodb_test.iml" group="kodb" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">

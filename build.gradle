@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: "signing"
 
 group = 'com.github.rabitarochan'
-archivesBaseName = 'kodb'
+archivesBaseName = 'kotlimapper'
 version = '0.1-SNAPSHOT'
 
 buildscript {
@@ -70,15 +70,15 @@ try {
             }
 
             pom.project {
-                name 'kodb'
+                name 'kotlimapper'
                 packaging 'jar'
                 description 'A simple object mapper for Kotlin.'
-                url 'http://github.com/rabitarochan/kodb'
+                url 'http://github.com/rabitarochan/kotlimapper'
 
                 scm {
-                    url "scm:git@github.com:rabitarochan/kodb.git"
-                    connection "scm:git@github.com:rabitarochan/kodb.git"
-                    developerConnection "scm:git@github.com:rabitarochan/kodb.git"
+                    url "scm:git@github.com:rabitarochan/kotlimapper.git"
+                    connection "scm:git@github.com:rabitarochan/kotlimapper.git"
+                    developerConnection "scm:git@github.com:rabitarochan/kotlimapper.git"
                 }
                 licenses {
                     license {

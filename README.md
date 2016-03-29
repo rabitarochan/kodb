@@ -41,7 +41,7 @@ kodb is designed very simply. Please see the following example.
 `Session` object is wrapper in java.sql.Connection to use API in kodb.
 
 ```kotlin
-import com.github.rabitarochan.kodb.Session
+import com.github.rabitarochan.kotlimapper.Session
 
 val connection: java.sql.Connection = /* ... */
 val session = Session(connection)
