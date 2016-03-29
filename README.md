@@ -1,4 +1,4 @@
-# kodb
+# kotlimapper
 
 [![Build Status](https://travis-ci.org/rabitarochan/kotlimapper.svg)](https://travis-ci.org/rabitarochan/kotlimapper)
 
@@ -28,17 +28,17 @@ repositories {
 }
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.github.rabitarochan:kodb:0.1-SNAPSHOT'
+    compile 'com.github.rabitarochan:kotlimapper:0.1-SNAPSHOT'
 }
 ```
 
 ## Example
 
-kodb is designed very simply. Please see the following example.
+kotlimapper is designed very simply. Please see the following example.
 
 ### Create Session
 
-`Session` object is wrapper in java.sql.Connection to use API in kodb.
+`Session` object is wrapper in java.sql.Connection to use API in kotlimapper.
 
 ```kotlin
 import com.github.rabitarochan.kotlimapper.Session
